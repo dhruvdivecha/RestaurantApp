@@ -1,8 +1,35 @@
 import { Button } from "../components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "../assets/sekela.jpeg";
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInstagram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+
 
 export default function Homepage() {
+    
+    const location = useLocation();
+
+    useEffect(() => {
+
+        if(location.hash === "#about-us"){
+            const selection = document.getElementById('about-us')
+            if(selection) {
+                selection.scrollIntoView({ behavior: "smooth"})
+            }
+        }
+
+        if(location.hash === "#contact"){
+            const selection = document.getElementById('contact')
+            if(selection) {
+                selection.scrollIntoView({ behavior: "smooth"})
+            }
+        }
+
+    }, [location])
+
+
   return (
     <div>
         <section className="min-h-screen flex items-start md:items-center">
@@ -31,6 +58,73 @@ export default function Homepage() {
                 </div>
             </div>
         </section>
+
+        <section className="py-12 bg-gray-700 rounded-md" id="about-us">
+            <div className="container mx-auto px-6 md:px-12">
+                <h2 className="text-3xl font-bold mb-4 text-center">
+                    About Us
+                </h2>
+                <div className="flex flex-col md:flex-row justify-center gap-8">
+                    <div className="max-w-md text-lg">
+                    Located in the vibrant heart of Dar es Salaam, Tanzania, Restaurant XYZ is a culinary haven that embodies the rich flavors and traditions of East Africa. Our restaurant is nestled in a bustling neighborhood, offering a serene escape with its inviting atmosphere and stylish decor. Inspired by the city's diverse cultural heritage, we blend local ingredients with international flair to create dishes that are both innovative and authentic.
+                    </div>
+                    <div className="max-w-md text-lg">
+                    Our menu features a delightful array of dishes, from fresh seafood to expertly prepared meats and vibrant vegetarian options. We pride ourselves on using locally sourced ingredients, reflecting the region's rich culinary heritage. Whether you're looking for a casual meal or a special occasion, our knowledgeable staff are always ready to guide you through our offerings.
+                    </div>
+                    <div className="max-w-md text-lg">
+                    Step into our restaurant and enjoy the warm hospitality that Dar es Salaam is known for. Our dining area is designed to provide a comfortable and intimate setting, perfect for families, friends, and business gatherings alike. Whether you're watching the sunset or enjoying a quiet evening, our restaurant is your home away from home.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      <section id="contact" className="py-12 bg-gray-500 mt-30 rounded-md mb-30">
+        <div className="container mx-auto px-6 md:px-12">
+            <h2 className="text-3xl font-bold mb-4 text-center">
+            Contact Us
+            </h2>
+            <div className="flex flex-col md:flex-row justify-center gap-8">
+                <div className="max-w-md text-lg text-center">
+                    <h3 className="text-2xl font-bold mb-2">
+                    Get in Touch
+                    </h3>
+                    <p>
+                    For any inquiries or to make a reservation, please feel free to contact us.
+                    </p>
+                    <ul className="list-none mt-4">
+                    <li className="mb-2">
+                        <span className="font-bold">Phone:</span> +255 712 345 678
+                    </li>
+                    <li className="mb-2">
+                        <span className="font-bold">WhatsApp:</span> +255 712 345 678
+                    </li>
+                    <li className="mb-2">
+                        <span className="font-bold">Instagram:</span> 
+                        <a href="https://www.instagram.com/yourrestaurantname" target="_blank" rel="noopener noreferrer">
+                        @yourrestaurantname
+                        </a>
+                    </li>
+                    </ul>
+                </div>
+                <div className="max-w-md text-lg text-center">
+                    <h3 className="text-2xl font-bold mb-2">
+                    Follow Us
+                    </h3>
+                    <p>
+                    Stay updated with our latest news and promotions.
+                    </p>
+                    <div className="flex justify-center gap-4 mt-4">
+                    <a href="https://www.instagram.com/yourrestaurantname" target="_blank" rel="noopener noreferrer">
+                        <FontAwesomeIcon icon={faInstagram} size="lg" className="text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                    <a href="https://wa.me/+255712345678" target="_blank" rel="noopener noreferrer">
+                        <FontAwesomeIcon icon={faWhatsapp} size="lg" className="text-green-500 hover:text-green-700 transition-colors" />
+                    </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
     </div>
  
   );
