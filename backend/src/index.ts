@@ -2,6 +2,7 @@ import express, { Response, Request} from "express"
 import cors from "cors"
 import "dotenv/config"
 import mongoose from "mongoose"
+import myUserRouter from "./routes/MyUserRoutes"
 
 const uri = process.env.MONGO_URI;
    if (!uri) {
@@ -18,9 +19,7 @@ const PORT = 4000;
 app.use(express.json()) //converts body into json data 
 app.use(cors())
 
-app.get("/test", async(req: Request, res: Response) => {
-    res.json({message: "hello"})
-})
+app.use("/api/my/user", myUserRouter)
 
 app.listen(PORT, ()=> {
     console.log(`server started on http://localhost:${PORT}`)
