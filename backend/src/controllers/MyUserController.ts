@@ -1,24 +1,54 @@
 import { Request, Response } from "express"
 import User from "../models/user";
 
-const createCurrentUser = async (req: Request, res: Response) => {
-
+const createCurrentUser = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { auth0Id } = req.body;
+        const { auth0Id, name, address, phoneNumber } = req.body;
         const user = await User.findOne({ auth0Id })
 
         if(user){
-            res.status(200).send()
+            res.status(200).send();
+            return;
         }
 
-        const newUser = new User(req.body)
+        const newUser = new User({
+            auth0Id,
+            name,
+            address,
+            phoneNumber
+        })
         await newUser.save()
-        res.status(201).json(newUser.toObject())
+        res.status(201).json(newUser.toObject());
         
     } catch (error) {
         console.log(error)
-        res.status(500).json({message: "Error creating user"})
+        res.status(500).json({message: "Error creating user"});
     }
 }
 
-export default {createCurrentUser}
+const updateCurrentUser = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { name, address, phoneNumber } = req.body;
+        const user = await User.findById(req.userId)
+
+        if(!user){
+            res.status(404).json({message: "User not found"});
+            return;
+        }
+
+        user.name = name;
+        user.address = address;
+        user.phoneNumber = phoneNumber;
+        await user.save();
+
+        res.send(user);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error updating user"});
+    }
+}
+
+
+
+export default {createCurrentUser, updateCurrentUser}

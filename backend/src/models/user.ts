@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        reuired: true,
+        required: true,
         unique: true,
     },
     name: {
@@ -16,7 +16,10 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-    }
+    },
+    phoneNumber: {
+        type: String,
+    },
 })
 
 const User = mongoose.model("User", userSchema)
