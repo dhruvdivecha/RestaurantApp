@@ -5,3 +5,14 @@ export type User = {
   address: string;
   phoneNumber: string;
 };
+
+
+export type MenuItem = {
+  name: string;
+  price: number;
+  category: string;
+};
+
+export type MenuItemsForm = {
+  menuItems: MenuItem[];
+};

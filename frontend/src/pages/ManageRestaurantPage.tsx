@@ -3,7 +3,7 @@ import ManageRestaurantForm from "../forms/manage-restaurant-form/ManageRestaura
 const ManageRestaurantPage = () => {
   return (
     <div>
-      <ManageRestaurantForm onSave={() => {}} isLoading={false} error={null} />
+      <ManageRestaurantForm />
     </div>
   );
 };

@@ -1,38 +1,27 @@
-import { body, validationResult, ValidationChain } from "express-validator";
-import { Request, Response, NextFunction } from "express";
-import { RequestHandler } from "express";
+import { body, validationResult } from "express-validator";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 
-const handleValidationErrors: RequestHandler = async (
-    req: Request, 
-    res: Response, 
-    next: NextFunction
-): Promise<void> => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        res.status(400).json({errors: errors.array()});
-        return;
-    }
-    next();
+const handleValidationErrors: RequestHandler = (req, res, next): void => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400).json({ errors: errors.array() });
+    return;
+  }
+  next();
 };
 
-export const validateMyUserRequest = [
-    body("name").notEmpty().isString(),
-    body("address").notEmpty().isString(),
-    body("phoneNumber").notEmpty().isString(),
-    handleValidationErrors
-] as RequestHandler[];
+export const validateMyUserRequest: RequestHandler[] = [
+  body("name").isString().notEmpty().withMessage("Name is required and must be a string"),
+  body("address").isString().notEmpty().withMessage("Address is required and must be a string"),
+  body("phoneNumber").isString().notEmpty().withMessage("Phone number is required and must be a string"),
+  handleValidationErrors,
+];
 
-export const validateMyRestaurantRequest = [
-    body("restaurantName").notEmpty().isString().withMessage("Restaurant name is required"),
-    body("orderPrice").notEmpty().isNumeric().withMessage("Order price is required"),
-    body("address").notEmpty().isString().withMessage("Address is required"),
-    body("cuisine").notEmpty().isString().withMessage("Cuisine is required"),
-    body("image").notEmpty().isString().withMessage("Image is required"),
-    body("estimatedDeliveryTime").notEmpty().isNumeric().withMessage("Estimated delivery time is required"),
-    body("menuItems").isArray() .withMessage("Menu Items must be an Arrray"),
-    body("menuItems.*.price").notEmpty().isNumeric({no_symbols: true}).withMessage("Price must be a number"),
-    body("menuItems.*.name").notEmpty().isString().withMessage("Name is required"),
-    body("menuItems.*.description").notEmpty().isString().withMessage("Description is required"),
-    body("menuItems.*.image").notEmpty().isString().withMessage("Image is required"),
-    handleValidationErrors
-] as RequestHandler[];
+export const validateMenuItemRequest: RequestHandler[] = [
+  body("name").isString().notEmpty().withMessage("Name is required and must be a string"),
+  body("price")
+    .isFloat({ min: 0 })
+    .withMessage("Price must be a number greater than or equal to 0"),
+  body("category").isString().notEmpty().withMessage("Category is required and must be a string"),
+  handleValidationErrors,
+];
