@@ -17,8 +17,14 @@ mongoose
 const app = express();
 const PORT = 4000;
 
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json()) //converts body into json data 
-app.use(cors())
 
 app.use("/api/my/user", myUserRouter)
 console.log("Registering /api/my/menu route");

@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { useCreateMenuItem } from "@/api/MyRestaurantApi";
 import { MenuItemsForm } from "@/types/types";
 import MenuSection from "./MenuSection";
-
+import MenuItemsSection from "./MenuItemsSection";
 const MenuItemSchema = z.object({
+  _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   price: z.coerce.number().min(0, "Price must be at least 0"),
   category: z.string().min(1, "Category is required"),
@@ -24,7 +25,7 @@ const ManageMenuItemForm = () => {
   const form = useForm<MenuItemsForm>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      menuItems: [{ name: "", price: 0, category: "" }],
+      menuItems: [{ _id: "", name: "", price: 0, category: "" }],
     },
   });
 
@@ -39,6 +40,7 @@ const ManageMenuItemForm = () => {
         className="space-y-8 p-6 bg-gray-900/50 rounded-xl shadow-xl max-w-5xl mx-auto"
       >
         <MenuSection />
+        <MenuItemsSection />
         <div className="flex justify-end">
           <Button
             type="submit"

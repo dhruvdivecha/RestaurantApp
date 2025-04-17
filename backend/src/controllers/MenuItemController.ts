@@ -1,6 +1,16 @@
 import { Request, Response } from "express";
 import MenuItem from "../models/menu";
 
+export const getMenuItems = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const menuItems = await MenuItem.find({ owner: req.userId });
+    res.json(menuItems);
+  } catch (error) {
+    console.error("Error getting menu items:", error);
+    res.status(500).json({ message: "Failed to get menu items" });
+  }
+};
+
 export const createMenuItems = async (req: Request, res: Response): Promise<void> => {
   console.log("Received request to create menu items:", req.body);
 
