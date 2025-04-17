@@ -34,24 +34,28 @@ const ManageMenuItemForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 p-6 bg-gray-900/50 rounded-xl shadow-xl max-w-5xl mx-auto"
-      >
-        <MenuSection />
+    <div className="flex flex-col gap-4">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 p-6 bg-gray-900/50 rounded-xl shadow-xl max-w-5xl mx-auto"
+        >
+          <MenuSection />
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              disabled={isCreatingMenuItem}
+              className="h-10 text-lg bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-transform transform hover:scale-[1.02] disabled:hover:scale-100"
+            >
+              {isCreatingMenuItem ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+      <div className="">
         <MenuItemsSection />
-        <div className="flex justify-end">
-          <Button
-            type="submit"
-            disabled={isCreatingMenuItem}
-            className="h-10 text-lg bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-transform transform hover:scale-[1.02] disabled:hover:scale-100"
-          >
-            {isCreatingMenuItem ? "Saving..." : "Save Changes"}
-          </Button>
-        </div>
-      </form>
-    </Form>
+      </div>
+    </div>
   );
 };
 
