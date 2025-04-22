@@ -44,52 +44,72 @@ export default function MenuItemsSection() {
     updateMenuItemMutate({ id: itemId, menuItem: updatedItem });
   };
 
-  if (isLoadingMenuItems) return <div>Loading...</div>;
-  if (!menuItems?.length) return <div>No menu items available.</div>;
-
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Menu Items</h2>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-white">Menu Items</h2>
       <Separator className="bg-gray-700" />
-      <div className="space-y-4">
+      <div className="space-y-5">
         {menuItems.map((item: MenuItem) => (
-          <div key={item._id} className="bg-gray-800 p-4 rounded-lg">
-            <h3 className="text-lg font-bold">{item.name}</h3>
-            <p className="text-gray-400">${item.price.toFixed(2)}</p>
-            <p className="text-gray-400">{item.category}</p>
-            <div className="flex justify-end">
+          <div
+            key={item._id}
+            className="bg-[#1e2530] p-5 rounded-xl shadow-sm border border-gray-700 flex justify-between items-start"
+          >
+            <div className="space-y-1">
+              <h3 className="text-lg font-semibold text-white">{item.name}</h3>
+              <p className="text-sm text-gray-400">
+                TSH {item.price.toLocaleString()}
+              </p>
+              <p className="text-sm text-gray-500 italic">{item.category}</p>
+            </div>
+
+            <div className="flex gap-2">
               <Popover>
-                <PopoverTrigger onClick={() => setEditingItem(item)}>
-                  <Button>
-                    <Pencil />
+                <PopoverTrigger>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    onClick={() => setEditingItem(item)}
+                    className="hover:bg-blue-600"
+                  >
+                    <Pencil className="h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent className="bg-[#ffffff] border border-gray-700 p-4 rounded-lg w-64 space-y-3">
                   <form
                     ref={formRef}
                     onSubmit={(e) => item._id && handleSubmit(e, item._id)}
+                    className="space-y-3"
                   >
-                    <Input name="name" defaultValue={editingItem?.name || ""} />
+                    <Input
+                      name="name"
+                      defaultValue={editingItem?.name || ""}
+                      placeholder="Item name"
+                    />
                     <Input
                       name="price"
                       type="number"
                       defaultValue={editingItem?.price?.toString() || ""}
+                      placeholder="Price"
                     />
                     <Input
                       name="category"
                       defaultValue={editingItem?.category || ""}
+                      placeholder="Category"
                     />
-                    <Button type="submit">Save</Button>
+                    <Button type="submit" className="w-full">
+                      Save
+                    </Button>
                   </form>
                 </PopoverContent>
               </Popover>
-            </div>
-            <div className="flex justify-end">
+
               <Button
+                variant="destructive"
+                size="icon"
                 onClick={() => item._id && deleteMenuItemMutate(item._id)}
                 disabled={isDeletingMenuItem}
               >
-                <Trash2 />
+                <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           </div>
