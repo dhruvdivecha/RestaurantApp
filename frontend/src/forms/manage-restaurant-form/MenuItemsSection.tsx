@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 
 export default function MenuItemsSection() {
@@ -23,7 +23,11 @@ export default function MenuItemsSection() {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
 
   if (isLoadingMenuItems) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loader2 className="h-4 w-4 animate-spin" />
+      </div>
+    );
   }
 
   if (!menuItems || menuItems.length === 0) {
