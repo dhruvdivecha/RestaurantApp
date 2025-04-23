@@ -50,16 +50,16 @@ export default function Homepage() {
               In our restaurant, you are sure to find something for yourself —
               we serve dishes from all over the world.
             </p>
-            <Link to="/order">
+            <Link to="/usermenu">
               <Button className="mt-6 px-6 py-3 bg-white text-gray-600 font-semibold rounded-full shadow-md hover:bg-gray-200 transition">
-                Order now
+                View Our Menu
               </Button>
             </Link>
           </div>
           <div className="relative mt-10 md:mt-0">
             <img
               src={heroImage}
-              alt="Delicious burger"
+              alt="Delicious gajjar chicken"
               className="rounded-xl shadow-lg w-[400px] h-auto"
             />
             <div className="absolute top-4 left-4 w-10 h-10 border-2 border-white rounded-full"></div>

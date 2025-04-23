@@ -4,6 +4,9 @@ import Homepage from "./pages/Homepage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
+import UserMenuPage from "./pages/UserMenuPage";
+
+import OrderStatus from "./pages/OrderStatus";
 
 const AppRoutes = () => {
   return (
@@ -26,10 +29,26 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/orderstatus"
+        element={
+          <Layout>
+            <OrderStatus />
+          </Layout>
+        }
+      />
+      <Route
         path="/manage-restaurant"
         element={
           <Layout>
             <ManageRestaurantPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/usermenu"
+        element={
+          <Layout>
+            <UserMenuPage />
           </Layout>
         }
       />

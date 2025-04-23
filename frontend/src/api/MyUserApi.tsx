@@ -115,3 +115,25 @@ export const useUpdateMyUser = () => {
 
   return { updateMyUser, isPending, isError, isSuccess, error, reset };
 };
+
+export const useGetMenuItems = () => {
+  const getMenuItemsRequest = async () => {
+    const response = await fetch(`${API_BASE_URL}/api/my/usermenu`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch menu items");
+    }
+
+    return response.json();
+  };
+
+  const { data: menuItems, isLoading: isLoadingMenuItems } = useQuery({
+    queryKey: ["menuItems"],
+    queryFn: getMenuItemsRequest,
+  });
+
+  return {
+    menuItems: menuItems ?? [],
+    isLoadingMenuItems,
+  };
+};

@@ -4,6 +4,7 @@ import "dotenv/config"
 import mongoose from "mongoose"
 import myUserRouter from "./routes/MyUserRoutes"
 import menuItemRouter from "./routes/MenuItemRoutes"
+import userMenuRouter from "./routes/UserMenuRoutes"
 
 const uri = process.env.MONGO_URI;
    if (!uri) {
@@ -29,6 +30,7 @@ app.use(express.json()) //converts body into json data
 app.use("/api/my/user", myUserRouter)
 console.log("Registering /api/my/menu route");
 app.use("/api/my/menu", menuItemRouter)
+app.use("/api/my/usermenu", userMenuRouter)
 
 app.get("/health", (req: Request, res: Response) => {
     res.status(200).json({ message: "OK" })

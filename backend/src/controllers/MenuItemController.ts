@@ -100,3 +100,12 @@ export const updateMenuItem = async (req: Request, res: Response): Promise<void>
     }
 };
 
+export const getPublicMenuItems = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const menuItems = await MenuItem.find({});
+    res.json(menuItems);
+  } catch (error) {
+    console.error("Error getting public menu items:", error);
+    res.status(500).json({ message: "Failed to get menu items" });
+  }
+};

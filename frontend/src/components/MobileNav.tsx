@@ -18,8 +18,8 @@ export default function MobileNav() {
   const navItems = [
     { label: "About us", link: "/#about-us" },
     { label: "Contact", link: "/#contact" },
-    { label: "Order Status", link: "/order-status" },
-    { label: "Order Now!!", link: "/order" },
+    { label: "Order Status", link: "/orderstatus" },
+    { label: "Order Now!!", link: "/usermenu" },
   ];
 
   return (

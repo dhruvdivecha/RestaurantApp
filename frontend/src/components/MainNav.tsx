@@ -14,12 +14,12 @@ const MainNav = () => {
       <Link to="/#contact">
         <NavButton text="Contact" />
       </Link>
-      <Link to="/order">
+      <Link to="/usermenu">
         <button className="text-white bg-blue-600 hover:bg-blue-700 text-gray-700 font-semibold tracking-wide px-4 py-2 rounded-xl transition-all cursor-pointer">
           Order Now!!
         </button>
       </Link>
-      <Link to="/order-status">
+      <Link to="/orderstatus">
         <button className="text-white bg-blue-600 hover:bg-blue-700 text-gray-700 font-semibold tracking-wide px-4 py-2 rounded-xl transition-all cursor-pointer">
           Order Status
         </button>
