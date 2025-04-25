@@ -31,6 +31,7 @@ const ManageMenuItemForm = () => {
 
   const onSubmit = (data: MenuItemsForm) => {
     createMenuItemMutate(data.menuItems);
+    form.reset();
   };
 
   return (

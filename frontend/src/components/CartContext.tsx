@@ -33,5 +33,4 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     </CartContext.Provider>
   );
 };
-
 export const useCart = () => useContext(CartContext);
