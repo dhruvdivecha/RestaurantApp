@@ -5,7 +5,7 @@ import AuthCallbackPage from "./pages/AuthCallbackPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import UserMenuPage from "./pages/UserMenuPage";
-import OrderStatusPage from "./pages/OrderStatus";
+// import OrderStatusPage from "./pages/OrderStatus";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -26,14 +26,14 @@ const AppRoutes = () => {
           </Layout>
         }
       />
-      <Route
+      {/* <Route
         path="/orderstatus"
         element={
           <Layout>
             <OrderStatusPage />
           </Layout>
         }
-      />
+      /> */}
       <Route
         path="/manage-restaurant"
         element={
