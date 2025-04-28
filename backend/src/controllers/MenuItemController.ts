@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export const getMenuItems = async (req: Request, res: Response): Promise<void> => {
   try {
-    const menuItems = await MenuItem.find({ owner: req.userId });
+    const menuItems = await MenuItem.find({});
     res.json(menuItems);
   } catch (error) {
     console.error("Error getting menu items:", error);
@@ -39,7 +39,6 @@ export const createMenuItems = async (req: Request, res: Response): Promise<void
         name,
         price,
         category,
-        owner: req.userId, 
       };
     });
 

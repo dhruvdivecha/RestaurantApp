@@ -7,11 +7,14 @@ import { useCreateMenuItem } from "@/api/MyRestaurantApi";
 import { MenuItemsForm } from "@/types/types";
 import MenuSection from "./MenuSection";
 import MenuItemsSection from "./MenuItemsSection";
+import { useAuth0 } from "@auth0/auth0-react";
+
 const MenuItemSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   price: z.coerce.number().min(0, "Price must be at least 0"),
   category: z.string().min(1, "Category is required"),
+  owner: z.string().optional(),
 });
 
 const FormSchema = z.object({
@@ -22,16 +25,29 @@ const FormSchema = z.object({
 
 const ManageMenuItemForm = () => {
   const { createMenuItemMutate, isCreatingMenuItem } = useCreateMenuItem();
+  const { user } = useAuth0();
+
   const form = useForm<MenuItemsForm>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      menuItems: [{ _id: "", name: "", price: 0, category: "" }],
+      menuItems: [
+        { _id: "", name: "", price: 0, category: "", owner: user?.sub },
+      ],
     },
   });
 
   const onSubmit = (data: MenuItemsForm) => {
-    createMenuItemMutate(data.menuItems);
-    form.reset();
+    const menuItemsWithOwner = data.menuItems.map((item) => ({
+      ...item,
+      owner: user?.sub,
+    }));
+
+    createMenuItemMutate(menuItemsWithOwner);
+    form.reset({
+      menuItems: [
+        { _id: "", name: "", price: 0, category: "", owner: user?.sub },
+      ],
+    });
   };
 
   return (

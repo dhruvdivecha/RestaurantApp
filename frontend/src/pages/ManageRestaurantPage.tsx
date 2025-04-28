@@ -2,7 +2,7 @@ import ManageRestaurantForm from "../forms/manage-restaurant-form/ManageRestaura
 
 const ManageRestaurantPage = () => {
   return (
-    <div>
+    <div className="container mx-auto py-8">
       <ManageRestaurantForm />
     </div>
   );

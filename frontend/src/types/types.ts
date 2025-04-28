@@ -12,6 +12,7 @@ export type MenuItem = {
   name: string;
   price: number;
   category: string;
+  owner?: string;
 };
 
 export type MenuItemsForm = {
