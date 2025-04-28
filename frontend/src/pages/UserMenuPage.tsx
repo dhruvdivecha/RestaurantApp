@@ -1,23 +1,38 @@
-"use client";
-
 import { useState } from "react";
 import { useGetMenuItems } from "@/api/MyUserApi";
 import { MenuItem } from "@/types/types";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useCart } from "@/components/CartContext";
 import { toast } from "sonner";
-import { Loader2, ChevronDown, Check, ShoppingCart } from "lucide-react";
-import { getUniqueCategories } from "@/utils/categoryUtils";
+import { Loader2, ShoppingCart } from "lucide-react";
+import Cart from "@/components/CartInMenu";
+import CategoryFilter from "@/components/CategoryFilter";
 
 export default function UserMenuPage() {
   const { menuItems, isLoadingMenuItems } = useGetMenuItems();
-  const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [cartItems, setCartItems] = useState<MenuItem[]>([]);
+
+  const addToCart = (item: MenuItem) => {
+    setCartItems((prev) => [...prev, item]);
+    toast.success("Added to cart", {
+      position: "top-center",
+      style: {
+        background: "#1f2937",
+        color: "#fff",
+        border: "1px solid #374151",
+      },
+    });
+  };
+
+  const removeFromCart = (itemToRemove: MenuItem) => {
+    setCartItems((prev) =>
+      prev.filter((item) => item._id !== itemToRemove._id)
+    );
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+  };
 
   if (isLoadingMenuItems) {
     return (
@@ -55,14 +70,14 @@ export default function UserMenuPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0F1D] py-16 relative overflow-hidden">
-      {/* Enhanced Background Effects */}
+      {/* Background Effects */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 bg-cyan-500/10 blur-[120px] rounded-full" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 blur-[100px] rounded-full" />
 
       <div className="container mx-auto px-4 max-w-7xl relative">
-        {/* Enhanced Header */}
+        {/* Header */}
         <div className="text-center mb-20 space-y-6 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-[100px] -z-10 animate-pulse" />
           <div className="relative inline-block">
@@ -81,77 +96,28 @@ export default function UserMenuPage() {
           </div>
         </div>
 
-        <div className="flex justify-center mb-16">
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                className="flex items-center gap-3 px-8 py-4 bg-gray-800/30 backdrop-blur-xl border border-gray-700/50 rounded-2xl hover:border-cyan-400/50 transition-all duration-300 hover:scale-[1.02] group hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-              >
-                <span className="text-gray-300 group-hover:text-cyan-200 transition-colors font-medium">
-                  {selectedCategory}
-                </span>
-                <ChevronDown className="h-5 w-5 text-cyan-400 transition-transform duration-300 group-data-[state=open]:rotate-180" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="bg-gray-800/80 backdrop-blur-xl border-gray-700/50 rounded-xl p-4 w-64 shadow-[0_0_25px_rgba(0,0,0,0.3)] animate-in fade-in zoom-in-95"
-              align="center"
-              sideOffset={8}
-            >
-              <div className="space-y-2">
-                <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
-                  <button
-                    onClick={() => setSelectedCategory("All")}
-                    className={`w-full px-4 py-3 text-left rounded-lg text-sm transition-all duration-300
-                      ${
-                        selectedCategory === "All"
-                          ? "bg-cyan-500/20 text-cyan-300 font-semibold shadow-[0_0_10px_rgba(34,211,238,0.2)] border border-cyan-500/20"
-                          : "hover:bg-gray-700/50 text-gray-300 hover:text-cyan-200"
-                      }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span>All Categories</span>
-                      {selectedCategory === "All" && (
-                        <Check className="h-4 w-4 text-cyan-400" />
-                      )}
-                    </div>
-                  </button>
+        {/* Cart Component */}
+        <Cart
+          cartItems={cartItems}
+          removeFromCart={removeFromCart}
+          clearCart={clearCart}
+        />
 
-                  {getUniqueCategories(menuItems).map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`w-full px-4 py-3 text-left rounded-lg text-sm transition-all duration-300
-                        ${
-                          selectedCategory === cat
-                            ? "bg-cyan-500/20 text-cyan-300 font-semibold shadow-[0_0_10px_rgba(34,211,238,0.2)] border border-cyan-500/20"
-                            : "hover:bg-gray-700/50 text-gray-300 hover:text-cyan-200"
-                        }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="capitalize">{cat}</span>
-                        {selectedCategory === cat && (
-                          <Check className="h-4 w-4 text-cyan-400" />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
+        {/* Category Filter */}
+        <CategoryFilter
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          menuItems={menuItems}
+        />
 
+        {/* Menu Items Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.map((item: MenuItem) => (
             <div key={item._id} className="group relative">
-              {/* Enhanced Card Glow Effect */}
               <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/50 to-blue-500/50 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500" />
 
               <div className="relative bg-gray-900/50 backdrop-blur-xl p-8 rounded-2xl shadow-2xl border border-gray-800/50 transition-all duration-500 hover:-translate-y-1">
-                {/* Decorative Corner Elements */}
                 <div className="absolute top-3 left-3 w-3 h-3 border-t border-l border-cyan-400/30" />
                 <div className="absolute top-3 right-3 w-3 h-3 border-t border-r border-cyan-400/30" />
                 <div className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-cyan-400/30" />
@@ -170,22 +136,11 @@ export default function UserMenuPage() {
                     </p>
                   </div>
 
-                  {/* Enhanced Add to Cart Button */}
                   <div className="relative mt-8 group/btn">
                     <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur-sm opacity-0 group-hover/btn:opacity-100 transition duration-500" />
                     <Button
                       className="relative w-full bg-gradient-to-r from-cyan-500/90 to-blue-500/90 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-3 overflow-hidden group-hover/btn:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-                      onClick={() => {
-                        addToCart(item);
-                        toast.success("Added to cart", {
-                          position: "top-center",
-                          style: {
-                            background: "#1f2937",
-                            color: "#fff",
-                            border: "1px solid #374151",
-                          },
-                        });
-                      }}
+                      onClick={() => addToCart(item)}
                     >
                       <span className="relative z-10 flex items-center gap-3">
                         <ShoppingCart className="h-5 w-5 opacity-85 transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:rotate-[-8deg]" />

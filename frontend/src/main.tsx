@@ -6,7 +6,6 @@ import AppRoutes from "./AppRoutes.tsx";
 import Auth0ProviderWithNavigate from "./auth/Auth0ProviderWithNavigate.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/sonner.tsx";
-import { CartProvider } from "./components/CartContext.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,10 +20,8 @@ createRoot(document.getElementById("root")!).render(
     <Router>
       <QueryClientProvider client={queryClient}>
         <Auth0ProviderWithNavigate>
-          <CartProvider>
-            <AppRoutes />
-            <Toaster visibleToasts={1} position="top-right" richColors />
-          </CartProvider>
+          <AppRoutes />
+          <Toaster visibleToasts={1} position="top-right" richColors />
         </Auth0ProviderWithNavigate>
       </QueryClientProvider>
     </Router>

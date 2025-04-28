@@ -9,8 +9,8 @@ const Auth0ProviderWithNavigate = ({ children }: Props) => {
   const navigate = useNavigate();
 
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
-  const clientID = import.meta.env.VITE_AUTHO_CLIENT_ID;
-  const redirectUri = import.meta.env.VITE_AUTHO_CALLBACK_URL;
+  const clientID = import.meta.env.VITE_AUTH0_CLIENT_ID;
+  const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;
   const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
   if (!domain || !clientID || !redirectUri || !audience) {

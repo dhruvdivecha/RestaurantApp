@@ -45,7 +45,13 @@ export default function UsernameMenu() {
             <Button
               variant="ghost"
               className="w-full text-left px-0"
-              onClick={() => logout()}
+              onClick={() =>
+                logout({
+                  logoutParams: {
+                    returnTo: window.location.origin,
+                  },
+                })
+              }
             >
               Log Out
             </Button>
