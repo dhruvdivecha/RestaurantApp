@@ -10,11 +10,11 @@ const UserOrderDisplay = () => {
     refreshOrders();
   }, []);
 
-  const handleDelete = async (orderId: string) => {
+  const handleDelete = (orderId: string) => {
     try {
-      await deleteOrder(orderId);
+      deleteOrder(orderId);
       // Wait for the delete operation to complete before refreshing
-      await refreshOrders();
+      refreshOrders();
       toast.success("Order deleted successfully");
     } catch (error) {
       console.error("Error deleting order:", error);
@@ -45,6 +45,7 @@ const UserOrderDisplay = () => {
                 <Button
                   onClick={() => handleDelete(order._id)}
                   variant="destructive"
+                  className="bg-red-500 hover:bg-red-600 cursor-pointer"
                 >
                   Delete
                 </Button>

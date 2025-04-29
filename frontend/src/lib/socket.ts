@@ -54,7 +54,7 @@ export const offNewOrder = (callback: (order: Order) => void) => {
   kitchenSocket.off("newOrder", callback);
 };
 
-// Add these to your existing socket functions
+// socket functions
 export const onOrderDeleted = (callback: (deletedOrderId: string) => void) => {
   kitchenSocket.on("order-deleted", callback);
 };

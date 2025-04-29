@@ -93,7 +93,16 @@ const useKitchenOrders = () => {
     connectToKitchen();
 
     const handleNewOrder = (order: Order) => {
-      setOrders((prev) => [order, ...prev]);
+      setOrders((prev) => {
+        // Check if order already exists
+        const orderExists = prev.some(
+          (existingOrder) => existingOrder._id === order._id
+        );
+        if (orderExists) {
+          return prev;
+        }
+        return [order, ...prev];
+      });
     };
 
     const handleOrderDeleted = (deletedOrderId: string) => {
@@ -109,6 +118,21 @@ const useKitchenOrders = () => {
       disconnectFromKitchen();
     };
   }, []);
+
+  // Add a new useEffect to handle refreshOrders
+  useEffect(() => {
+    if (orders.length > 0) {
+      // Remove duplicate orders based on _id
+      const uniqueOrders = orders.filter(
+        (order, index, self) =>
+          index === self.findIndex((o) => o._id === order._id)
+      );
+
+      if (uniqueOrders.length !== orders.length) {
+        setOrders(uniqueOrders);
+      }
+    }
+  }, [orders]);
 
   return {
     orders,
