@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGetMenuItems } from "@/api/MyUserApi";
 import { MenuItem } from "@/types/types";
 import { Button } from "@/components/ui/button";
@@ -6,11 +6,26 @@ import { toast } from "sonner";
 import { Loader2, ShoppingCart } from "lucide-react";
 import Cart from "@/components/CartInMenu";
 import CategoryFilter from "@/components/CategoryFilter";
+import { useNavigate } from "react-router-dom";
 
 export default function UserMenuPage() {
   const { menuItems, isLoadingMenuItems } = useGetMenuItems();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [cartItems, setCartItems] = useState<MenuItem[]>([]);
+  const navigate = useNavigate();
+
+  // Load cart items from localStorage on component mount
+  useEffect(() => {
+    const savedCartItems = localStorage.getItem("cartItems");
+    if (savedCartItems) {
+      setCartItems(JSON.parse(savedCartItems));
+    }
+  }, []);
+
+  // Save cart items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (item: MenuItem) => {
     setCartItems((prev) => [...prev, item]);
@@ -32,6 +47,22 @@ export default function UserMenuPage() {
 
   const clearCart = () => {
     setCartItems([]);
+    localStorage.removeItem("cartItems");
+  };
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty", {
+        position: "top-center",
+        style: {
+          background: "#1f2937",
+          color: "#fff",
+          border: "1px solid #374151",
+        },
+      });
+      return;
+    }
+    navigate("/checkout", { state: { cartItems } });
   };
 
   if (isLoadingMenuItems) {
@@ -101,6 +132,7 @@ export default function UserMenuPage() {
           cartItems={cartItems}
           removeFromCart={removeFromCart}
           clearCart={clearCart}
+          onCheckout={handleCheckout}
         />
 
         {/* Category Filter */}

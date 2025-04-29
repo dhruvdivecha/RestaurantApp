@@ -5,6 +5,9 @@ import mongoose from "mongoose"
 import myUserRouter from "./routes/MyUserRoutes"
 import menuItemRouter from "./routes/MenuItemRoutes"
 import userMenuRouter from "./routes/UserMenuRoutes"
+import http from "http"
+import { Server as IOServer } from "socket.io"
+import kitchenRoutes from "./routes/KitchenRoutes"
 
 const uri = process.env.MONGO_URI;
    if (!uri) {
@@ -16,7 +19,19 @@ mongoose
 .then(() => console.log("Connected to DB"))
 
 const app = express();
+const httpServer = http.createServer(app);
+// Allows your React front-end origin to connect
+export const io = new IOServer(httpServer, { cors: { origin: "*" } });
+
 const PORT = 4000;
+
+io.of("/kitchen").on("connection", (socket) => {
+  console.log("Kitchen staff connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Kitchen staff disconnected:", socket.id);
+  });
+});
 
 // strip the dangerous React-Router headers
 app.use((req: Request, res: Response, next) => {
@@ -38,12 +53,14 @@ app.use(express.json());
 app.use("/api/my/user", myUserRouter);
 app.use("/api/my/menu", menuItemRouter);
 app.use("/api/my/usermenu", userMenuRouter);
+app.use("/api/my/kitchen", kitchenRoutes);
+
 
 // Health check & listener
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "OK" });
 });
 
-app.listen(PORT, () => {
-  console.log(`server started on http://localhost:${PORT}`);
-});
+httpServer.listen(PORT, () =>
+  console.log(`Server + Socket.IO listening on port ${PORT}`)
+);

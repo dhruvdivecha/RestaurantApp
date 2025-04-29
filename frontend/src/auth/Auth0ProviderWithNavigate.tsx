@@ -1,6 +1,6 @@
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -42,12 +42,14 @@ const Auth0ProviderWithNavigate = ({ children }: Props) => {
 
 const Auth0ProviderWithUser = ({ children }: Props) => {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-  const hasCreatedRef = useRef(false);
 
   useEffect(() => {
     const createUser = async () => {
-      if (isAuthenticated && user && !hasCreatedRef.current) {
-        hasCreatedRef.current = true;
+      if (isAuthenticated && user) {
+        // Check if user has already been created
+        const hasCreated = localStorage.getItem(`user_created_${user.sub}`);
+        if (hasCreated) return;
+
         try {
           const token = await getAccessTokenSilently();
           const response = await fetch(
@@ -77,9 +79,11 @@ const Auth0ProviderWithUser = ({ children }: Props) => {
                 border: "1px solid #374151",
               },
             });
-            hasCreatedRef.current = false; // Allow retry on failure
             return;
           }
+
+          // Mark user as created in localStorage
+          localStorage.setItem(`user_created_${user.sub}`, "true");
 
           toast.success("Welcome! Your account is ready.", {
             position: "top-center",
@@ -99,7 +103,6 @@ const Auth0ProviderWithUser = ({ children }: Props) => {
               border: "1px solid #374151",
             },
           });
-          hasCreatedRef.current = false; // Allow retry on failure
         }
       }
     };

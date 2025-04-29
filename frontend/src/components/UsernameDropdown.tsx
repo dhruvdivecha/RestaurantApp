@@ -36,6 +36,12 @@ export default function UsernameMenu() {
           </DropdownMenuItem>
           <Separator className="my-2 bg-gray-700" />
           <DropdownMenuItem className="px-3 py-2 hover:bg-gray-700 rounded-md transition-colors">
+            <Link to="/kitchen" className="block w-full">
+              Kitchen
+            </Link>
+          </DropdownMenuItem>
+          <Separator className="my-2 bg-gray-700" />
+          <DropdownMenuItem className="px-3 py-2 hover:bg-gray-700 rounded-md transition-colors">
             <Link to="/user-profile" className="block w-full">
               User Profile
             </Link>

@@ -6,18 +6,19 @@ import {
 } from "@/components/ui/popover";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import { MenuItem } from "@/types/types";
-import { toast } from "sonner";
 
 interface CartProps {
   cartItems: MenuItem[];
   removeFromCart: (item: MenuItem) => void;
   clearCart: () => void;
+  onCheckout: () => void;
 }
 
 export default function Cart({
   cartItems,
   removeFromCart,
   clearCart,
+  onCheckout,
 }: CartProps) {
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => total + item.price, 0);
@@ -97,17 +98,14 @@ export default function Cart({
                       TZS {getTotalPrice().toLocaleString()}
                     </span>
                   </div>
-                  <Button
-                    className="w-full relative group/btn bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] overflow-hidden"
-                    onClick={() => {
-                      toast.success("Proceeding to checkout...");
-                    }}
-                  >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
+                  <div className="space-y-2">
+                    <Button
+                      onClick={onCheckout}
+                      className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2.5 rounded-lg transition-colors"
+                    >
                       Proceed to Checkout
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-45 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-700" />
-                    </span>
-                  </Button>
+                    </Button>
+                  </div>
                 </div>
               </>
             )}

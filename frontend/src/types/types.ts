@@ -18,3 +18,11 @@ export type MenuItem = {
 export type MenuItemsForm = {
   menuItems: MenuItem[];
 };
+
+export type KitchenOrder = {
+  _id: string;
+  items: MenuItem[];
+  totalAmount: number;
+  status: "pending" | "preparing" | "ready" | "completed";
+  createdAt: string;
+};

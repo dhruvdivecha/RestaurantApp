@@ -6,6 +6,9 @@ import UserProfilePage from "./pages/UserProfilePage";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import UserMenuPage from "./pages/UserMenuPage";
 // import OrderStatusPage from "./pages/OrderStatus";
+import CheckoutPage from "./pages/CheckoutPage";
+import Kitchen from "./pages/Kitchen";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -23,6 +26,22 @@ const AppRoutes = () => {
         element={
           <Layout>
             <UserProfilePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <Layout>
+            <CheckoutPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/kitchen"
+        element={
+          <Layout>
+            <Kitchen />
           </Layout>
         }
       />
