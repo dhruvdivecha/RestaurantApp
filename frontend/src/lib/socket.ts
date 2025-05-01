@@ -16,11 +16,14 @@ interface Order {
 }
 
 export const kitchenSocket = io(`${API_BASE_URL}/kitchen`, {
-  transports: ["websocket"],
+  transports: ["websocket", "polling"],
   autoConnect: false,
   reconnection: true,
-  reconnectionAttempts: 5,
+  reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  timeout: 20000,
+  withCredentials: true
 });
 
 // Connection management
@@ -28,6 +31,23 @@ export const connectToKitchen = () => {
   try {
     kitchenSocket.connect();
     console.log("Connecting to kitchen socket...");
+
+    kitchenSocket.on("connect", () => {
+      console.log("Connected to kitchen socket:", kitchenSocket.id);
+    });
+
+    kitchenSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error.message);
+    });
+
+    kitchenSocket.on("disconnect", (reason) => {
+      console.log("Disconnected from kitchen socket. Reason:", reason);
+      if (reason === "io server disconnect" || reason === "transport close") {
+        // try to reconnect
+        kitchenSocket.connect();
+      }
+    });
+
   } catch (error) {
     console.error("Error connecting to kitchen socket:", error);
   }
