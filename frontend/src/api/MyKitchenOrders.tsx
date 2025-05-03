@@ -9,8 +9,9 @@ import {
   kitchenSocket,
 } from "../lib/socket";
 import { toast } from "sonner";
+import { useAuth0 } from "@auth0/auth0-react";
 
-interface Order {
+export interface Order {
   _id: string;
   items: Array<{
     _id: string;
@@ -21,6 +22,7 @@ interface Order {
   totalAmount: number;
   status: "pending" | "preparing" | "ready" | "completed";
   createdAt: string;
+  table?: string;
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -29,12 +31,16 @@ const useKitchenOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { getAccessTokenSilently } = useAuth0();
+
   const getOrders = async () => {
     try {
       setIsLoading(true);
+      const token = await getAccessTokenSilently();
       const response = await fetch(`${API_BASE_URL}/api/my/kitchen/orders`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
 
@@ -58,13 +64,15 @@ const useKitchenOrders = () => {
   };
 
   const deleteOrder = async (orderId: string) => {
+    const token = await getAccessTokenSilently();
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/my/kitchen/orders/${orderId}`,
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );

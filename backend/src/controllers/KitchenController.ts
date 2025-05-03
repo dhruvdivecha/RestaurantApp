@@ -25,7 +25,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
 export const placeOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     console.log("Received order request:", req.body);
-    const { items, totalAmount } = req.body;
+    const { items, totalAmount, table } = req.body;
 
     // Validate request body
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -64,6 +64,7 @@ export const placeOrder = async (req: Request, res: Response): Promise<void> => 
         category: item.category
       })),
       totalAmount,
+      table,
       status: "pending",
     });
     console.log("Order created successfully:", order);

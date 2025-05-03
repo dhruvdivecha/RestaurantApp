@@ -70,6 +70,11 @@ const UserOrderDisplay = () => {
                   <p className="text-sm text-gray-500">
                     {new Date(order.createdAt).toLocaleTimeString()}
                   </p>
+                  {order.table && (
+                    <p className="text-sm text-cyan-500 font-semibold mt-1">
+                      Table: {order.table}
+                    </p>
+                  )}
                 </div>
                 <Button
                   onClick={() => handleDelete(order._id)}
@@ -85,9 +90,9 @@ const UserOrderDisplay = () => {
                 </Button>
               </div>
               <div className="space-y-2">
-                {order.items?.map((item) => (
+                {order.items?.map((item, idx) => (
                   <div
-                    key={`item-${item._id}`}
+                    key={`item-${item._id || idx}`}
                     className="flex justify-between"
                   >
                     <span>{item.name}</span>

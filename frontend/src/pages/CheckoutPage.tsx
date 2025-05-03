@@ -13,21 +13,34 @@ const CheckoutPage = () => {
   const { cartItems } = location.state as { cartItems: MenuItem[] };
   const total = cartItems.reduce((sum, item) => sum + item.price, 0);
   const [isLoading, setIsLoading] = useState(false);
+  const [tableNumber, setTableNumber] = useState<string>("");
+  const [tableError, setTableError] = useState<string>("");
 
   const handleConfirmOrder = async () => {
     if (isLoading) return;
     setIsLoading(true);
 
+    // Require table selection
+    if (!tableNumber) {
+      setTableError("Please select a table number.");
+      setIsLoading(false);
+      return;
+    } else {
+      setTableError("");
+    }
+
     try {
       // Validate cart items
       if (!cartItems || cartItems.length === 0) {
         toast.error("Your cart is empty");
+        setIsLoading(false);
         return;
       }
 
       // Validate total
       if (total <= 0) {
         toast.error("Invalid order total");
+        setIsLoading(false);
         return;
       }
 
@@ -44,6 +57,7 @@ const CheckoutPage = () => {
             category: item.category,
           })),
           totalAmount: total,
+          table: tableNumber,
         }),
       });
 
@@ -104,7 +118,60 @@ const CheckoutPage = () => {
         </Button>
 
         <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-800/50 p-8">
-          <h1 className="text-3xl font-bold text-white mb-8">Checkout</h1>
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold text-white">Checkout</h1>
+            <Button
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl transition-colors"
+              onClick={() => {
+                localStorage.removeItem("cartItems");
+                toast.success("Cart cleared!");
+                navigate("/usermenu");
+              }}
+              variant="destructive"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Clear Cart
+            </Button>
+          </div>
+
+          {/* Table Number Dropdown */}
+          <div className="mb-6">
+            <label
+              htmlFor="tableNumber"
+              className="block text-white font-semibold mb-2"
+            >
+              Table Number
+            </label>
+            <select
+              id="tableNumber"
+              value={tableNumber}
+              onChange={(e) => setTableNumber(e.target.value)}
+              className="w-full p-3 rounded-lg border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            >
+              <option value="">Select table...</option>
+              {[...Array(20)].map((_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </select>
+            {tableError && (
+              <p className="text-red-500 mt-2 text-sm">{tableError}</p>
+            )}
+          </div>
 
           <div className="space-y-6">
             {cartItems.map((item) => (

@@ -8,6 +8,7 @@ const orderSchema = new mongoose.Schema({
     category: String
   }],
   totalAmount: { type: Number, required: true },
+  table: { type: String, required: false },
   status: { type: String, enum: ["pending", "preparing", "ready", "completed"], default: "pending" },
   createdAt: { type: Date, default: Date.now },
 });
