@@ -20,7 +20,12 @@ export default function MenuItemsSection() {
   const { menuItems, isLoadingMenuItems } = useGetMenuItems();
   const { updateMenuItemMutate, isUpdatingMenuItem } = useUpdateMenuItem();
   const { deleteMenuItemMutate, isDeletingMenuItem } = useDeleteMenuItem();
-  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [editValues, setEditValues] = useState<{
+    name: string;
+    price: string;
+    category: string;
+  } | null>(null);
+  const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   if (isLoadingMenuItems) {
@@ -39,18 +44,38 @@ export default function MenuItemsSection() {
     );
   }
 
+  const handleEditClick = (item: MenuItem) => {
+    setEditValues({
+      name: item.name || "",
+      price: item.price?.toString() || "",
+      category: item.category || "",
+    });
+    setOpenPopoverId(item._id ?? null);
+  };
+
+  const handleEditChange = (
+    field: "name" | "price" | "category",
+    value: string
+  ) => {
+    if (!editValues) return;
+    setEditValues({ ...editValues, [field]: value });
+  };
+
   const handleSubmit = (e: React.FormEvent, itemId: string) => {
     e.preventDefault();
-    if (!editingItem) return;
-
+    if (!editValues) return;
+    if (!editValues.name || !editValues.price || !editValues.category) {
+      // Optionally show validation error here
+      return;
+    }
     const updatedItem = {
-      name: editingItem.name,
-      price: editingItem.price,
-      category: editingItem.category,
+      name: editValues.name,
+      price: parseFloat(editValues.price),
+      category: editValues.category,
     };
-
     updateMenuItemMutate({ id: itemId, menuItem: updatedItem });
-    setEditingItem(null);
+    setEditValues(null);
+    setOpenPopoverId(null);
   };
 
   const filteredItems =
@@ -134,7 +159,17 @@ export default function MenuItemsSection() {
               </div>
 
               <div className="flex gap-2">
-                <Popover>
+                <Popover
+                  open={openPopoverId === item._id}
+                  onOpenChange={(open) => {
+                    if (open) {
+                      handleEditClick(item);
+                    } else {
+                      setEditValues(null);
+                      setOpenPopoverId(null);
+                    }
+                  }}
+                >
                   <PopoverTrigger asChild>
                     <button
                       type="button"
@@ -150,12 +185,13 @@ export default function MenuItemsSection() {
                       <div className="space-y-4">
                         <Input
                           name="name"
-                          value={editingItem?.name || item.name}
+                          value={
+                            openPopoverId === item._id && editValues
+                              ? editValues.name
+                              : ""
+                          }
                           onChange={(e) =>
-                            setEditingItem({
-                              ...item,
-                              name: e.target.value,
-                            })
+                            handleEditChange("name", e.target.value)
                           }
                           className="bg-gray-900 border-gray-700 text-white focus:ring-2 focus:ring-blue-500 rounded-lg py-2 px-3"
                           placeholder="Item name"
@@ -163,24 +199,26 @@ export default function MenuItemsSection() {
                         <Input
                           name="price"
                           type="number"
-                          value={editingItem?.price || item.price}
+                          value={
+                            openPopoverId === item._id && editValues
+                              ? editValues.price
+                              : ""
+                          }
                           onChange={(e) =>
-                            setEditingItem({
-                              ...item,
-                              price: parseFloat(e.target.value),
-                            })
+                            handleEditChange("price", e.target.value)
                           }
                           className="bg-gray-900 border-gray-700 text-white focus:ring-2 focus:ring-blue-500 rounded-lg py-2 px-3"
                           placeholder="Price"
                         />
                         <Input
                           name="category"
-                          value={editingItem?.category || item.category}
+                          value={
+                            openPopoverId === item._id && editValues
+                              ? editValues.category
+                              : ""
+                          }
                           onChange={(e) =>
-                            setEditingItem({
-                              ...item,
-                              category: e.target.value,
-                            })
+                            handleEditChange("category", e.target.value)
                           }
                           className="bg-gray-900 border-gray-700 text-white focus:ring-2 focus:ring-blue-500 rounded-lg py-2 px-3"
                           placeholder="Category"
