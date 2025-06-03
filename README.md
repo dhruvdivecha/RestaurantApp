@@ -11,6 +11,7 @@ A comprehensive, real-time restaurant management solution designed to streamline
   - Instant order notifications
   - Efficient order processing workflow
   - Optimistic UI updates for better user experience
+  - 🎥 [Watch: Order Flow Demo](https://youtu.be/1b1IINq8I7w)
 
 ### For Restaurant Owners
 
@@ -19,6 +20,7 @@ A comprehensive, real-time restaurant management solution designed to streamline
   - Category-based menu organization
   - Real-time price and item updates
   - Sales analytics and insights
+  - 🎥 [Watch: Editing Menu Items Demo](https://youtu.be/1Y5SOpqa2ns)
 
 ### For Customers
 
