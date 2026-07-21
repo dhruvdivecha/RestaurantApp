@@ -59,9 +59,14 @@
     "tailwindcss": "^4.1.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "~6.2.6"
+    "vite": "~6.4.3"
   },
   "overrides": {
-    "react-is": "^19.0.0-rc-69d4b800-20241021"
+    "brace-expansion": "^1.1.12",
+    "flatted": "^3.4.2",
+    "lodash": "^4.17.23",
+    "picomatch": "^2.3.2",
+    "react-is": "^19.0.0-rc-69d4b800-20241021",
+    "socket.io-parser": "^4.2.6"
   }
 }
